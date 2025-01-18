@@ -29,6 +29,10 @@ patterns = [
 ] + [
     random.sample(["GET /logowanie", "POST /logowanie", "GET /dashboard", "POST /transaction", "GET /settings"], random.randint(3, 5))
     for _ in range(50)  # Add more random patterns
+] + [
+    ["GET /dashboard"] for _ in range(10)
+] + [
+    ["GET /logowanie"] for _ in range(10)
 ]
 
 # Templates for valid and SQL injection payloads
@@ -113,6 +117,8 @@ def generate_csv(filename, group_count):
         for pattern in group_patterns:
             for action in pattern:
                 http_method, url = action.split()
+                if (http_method == "GET"):
+                    is_sql_injection = False
                 log_entry = generate_log_entry(group_ip, group_timestamp, url, http_method, is_sql_injection, user_agent)
                 logs.append(log_entry)
                 group_timestamp += timedelta(seconds=random.randint(1, 300))  # Increment time
@@ -131,4 +137,4 @@ def generate_csv(filename, group_count):
     print(f"Generated {len(logs)} logs with {sql_injection_count} SQL injection attempts.")
 
 # Example usage
-generate_csv("generated_logs_test.csv", group_count=20000) # 9981
+generate_csv("generated_logs_tests.csv", group_count=2000) # 7869
