@@ -131,4 +131,4 @@ def generate_csv(filename, group_count):
     print(f"Generated {len(logs)} logs with {sql_injection_count} SQL injection attempts.")
 
 # Example usage
-generate_csv("generated_logs_test.csv", group_count=10000)
+generate_csv("generated_logs_test.csv", group_count=20000) # 9981

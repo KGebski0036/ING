@@ -35,10 +35,6 @@ input_csv = "generated_logs.csv"
 # Preprocess data using the merged function
 payloads, labels = group_and_sort_within_group(input_csv, group_column_index=2, sort_column_index=1, extract_columns=[9, 10])
 
-# Print preprocessed data
-print("Payloads:", payloads)
-print("Labels:", labels)
-
 # Encode Payloads and Labels
 vectorizer = CountVectorizer()
 x_encoded = vectorizer.fit_transform(payloads).toarray()
@@ -82,7 +78,7 @@ criterion = nn.BCELoss()
 optimizer = optim.Adam(model.parameters(), lr=0.01)
 
 # Train the Model
-epochs = 100
+epochs = 50
 for epoch in range(epochs):
     model.train()
 
