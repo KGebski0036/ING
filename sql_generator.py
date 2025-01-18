@@ -2,15 +2,18 @@ import csv
 import random
 from datetime import datetime, timedelta
 
+
 # Define a function to generate random IP addresses
 def generate_ip():
     return ".".join(str(random.randint(0, 255)) for _ in range(4))
+
 
 # Define a function to generate random timestamps
 def generate_timestamp(start_date, end_date):
     delta = end_date - start_date
     random_seconds = random.randint(0, int(delta.total_seconds()))
     return start_date + timedelta(seconds=random_seconds)
+
 
 # Templates for log entries
 def generate_log_entry(ip, timestamp, is_sql_injection):
@@ -23,8 +26,8 @@ def generate_log_entry(ip, timestamp, is_sql_injection):
     ]
 
     referrers = [
-        "https://kingbank.pl/", 
-        "https://kingbank.pl/logowanie", 
+        "https://kingbank.pl/",
+        "https://kingbank.pl/logowanie",
         "https://kingbank.pl/dashboard"
     ]
 
@@ -62,6 +65,7 @@ def generate_log_entry(ip, timestamp, is_sql_injection):
         "Is_SQL_Injection": 1 if is_sql_injection else 0
     }
 
+
 # Main function to generate CSV file
 def generate_csv(filename, group_count):
     start_date = datetime(2025, 1, 1)
@@ -96,5 +100,6 @@ def generate_csv(filename, group_count):
 
     print(f"Generated {len(logs)} logs with {sql_injection_count} SQL injection attempts.")
 
+
 # Example usage
-generate_csv("generated_logs.csv", group_count=50)
+generate_csv("generated_logs.csv", group_count=10000)
