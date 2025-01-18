@@ -1,4 +1,3 @@
-import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -6,56 +5,13 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 import pickle
-
-
-# Preprocessing Function: Group, Sort, Extract Payloads and Labels
-def group_and_sort_within_group(input_csv, group_column_index, sort_column_index, extract_columns):
-    import pandas as pd
-
-    # Load CSV
-    df = pd.read_csv(input_csv, header=None)
-
-    # Replace NaN values in the payload column with empty strings
-    df[extract_columns[0]] = df[extract_columns[0]].fillna("").astype(str)
-
-    # Group by the group_column_index and sort within each group
-    df_grouped = df.groupby(df[group_column_index], group_keys=False)
-    df_sorted = df_grouped.apply(lambda x: x.sort_values(by=sort_column_index))
-
-    # Extract specific columns
-    extracted_data = df_sorted[extract_columns].reset_index(drop=True)
-
-    # Concatenate payloads within each group
-    concatenated_payloads = (
-        df_sorted.groupby(df[group_column_index])[extract_columns[0]]
-        .apply(lambda x: " ".join(map(str, x)))
-        .reset_index(drop=True)
-        .tolist()
-    )
-
-    # Extract corresponding labels for the groups
-    labels = (
-        df_sorted.groupby(df[group_column_index])[extract_columns[1]]
-        .first()
-        .reset_index(drop=True)
-        .tolist()
-    )
-
-    return concatenated_payloads, labels
+from get_group import *
 
 if __name__ =="__main__":
 
-    # Main Pipeline
-    input_csv = "generated_logs_tests.csv"
+    input_csv = "generated_logs.csv"
 
-    # Preprocess data using the merged function
-    payloads, labels = group_and_sort_within_group(input_csv, group_column_index=2, sort_column_index=1, extract_columns=[9, 10])
-
-
-    for i in range(len(payloads)):
-        print(payloads[i], labels[i])
-
-    print(len(payloads))
+    payloads, labels = group_and_sort_within_group(input_csv, group_column_index=2, extract_columns=[9, 10])
 
     # Encode Payloads and Labels
     vectorizer = CountVectorizer()
@@ -92,7 +48,6 @@ if __name__ =="__main__":
             return self.network(x)
 
 
-    # Initialize Model, Loss, and Optimizer
     input_dim = X_train_tensor.shape[1]
     model = BinaryClassificationModel(input_dim)
 

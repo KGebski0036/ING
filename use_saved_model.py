@@ -25,21 +25,15 @@ with open('vectorizer.pkl', 'rb') as f:
     vectorizer = pickle.load(f)
 
 # Load the model with the correct input dimension (should match training input size)
-model = BinaryClassificationModel(input_dim=9612)  # Match the input size used during training
+model = BinaryClassificationModel(input_dim=12934)  # Match the input size used during training
 model.load_state_dict(torch.load('sql_classification_model.pth'))
 model.eval()  # Set the model to evaluation mode
 
-data = group_and_sort_within_group("generated_logs.csv", 2, 1, [9])
-
-
-# Example new payloads for prediction
-new_payloads = [
-    ', '.join(inner[0] for inner in group[0])  # Extract and join the inner elements with a comma
-    for group in data if isinstance(group, list)
-]
+data, labels = group_and_sort_within_group("generated_logs_tests.csv", 2, [9, 9])
+# data, labels = group_and_sort_within_group("data/logs.csv", 2, [9, 9])
 
 # Preprocess new payloads using the loaded vectorizer
-new_features = vectorizer.transform(new_payloads).toarray()
+new_features = vectorizer.transform(data).toarray()
 
 # Convert to a PyTorch tensor
 new_features_tensor = torch.tensor(new_features, dtype=torch.float32)
@@ -54,11 +48,9 @@ predicted_percentages = predictions * 100
 detected_sql = 0
 # Print the predicted percentages
 for i, percent in enumerate(predicted_percentages.tolist()):
-    if i % 1000 == 0:
-        print(i)
-    if (percent > 0.70):
+    if (percent > 50):
         detected_sql += 1
-        if (data[i][1] == '0'):
-            print(data[i][0])
+        print(data[i])
+        print("Uwaga niebezpieczne zapytanie (SQL injection)!!! " + str(labels[i]) + " Prawdopodobieństwo " + str(percent) + "%" )
 
-print("Dupsko:" + str(detected_sql))
+print("Dupsko: " + str(detected_sql))

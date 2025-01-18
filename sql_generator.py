@@ -3,8 +3,13 @@ import random
 from datetime import datetime, timedelta
 
 # Define a function to generate random IP addresses
+used_ips = []
 def generate_ip():
-    return ".".join(str(random.randint(0, 255)) for _ in range(4))
+    while True:
+        ip = ".".join(str(random.randint(0, 255)) for _ in range(4))
+        if ip not in used_ips:
+            return ip
+     
 
 # Define a function to generate random timestamps
 def generate_timestamp(start_date, end_date):
@@ -13,26 +18,36 @@ def generate_timestamp(start_date, end_date):
     return start_date + timedelta(seconds=random_seconds)
 
 # Define log patterns
-patterns = [
-    ["GET /logowanie", "POST /logowanie"],
-    ["GET /resetpassword", "POST /resetpassword"],
-    ["GET /logowanie", "POST /logowanie", "POST /transaction"],
-    ["GET /dashboard", "POST /transaction", "GET /settings"],
-    ["GET /logowanie", "POST /logowanie", "POST /profile", "GET /settings"],
-    ["GET /settings", "POST /profile", "POST /transaction"],
-    ["POST /transaction", "POST /transaction", "GET /dashboard"],
-    ["GET /logowanie", "GET /dashboard", "POST /profile"],
-    ["GET /dashboard", "GET /settings", "POST /transaction"],
-    ["POST /logowanie", "GET /dashboard", "POST /profile"]
-] + [
-    ["GET /logowanie", "POST /logowanie"] for _ in range(40)
-] + [
-    random.sample(["GET /logowanie", "POST /logowanie", "GET /dashboard", "POST /transaction", "GET /settings"], random.randint(3, 5))
-    for _ in range(50)  # Add more random patterns
-] + [
-    ["GET /dashboard"] for _ in range(10)
-] + [
-    ["GET /logowanie"] for _ in range(10)
+valid_patterns = [
+    ["GET /dashboard"],
+    ["GET /dashboard", "GET /logowanie"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "POST /logowanie"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "POST /logowanie", "POST /logowanie"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /resetpassword", "POST /resetpassword"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /resetpassword", "POST /resetpassword", "POST /resetpassword"],
+    ["GET /dashboard", "GET /rejestracja", "POST /rejestracja"],
+    ["GET /dashboard", "GET /rejestracja", "POST /rejestracja", "GET /logowanie", "POST /logowanie"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /settings"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /profile"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction", "POST /transaction"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction", "POST /transaction", "POST /transaction"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction", "POST /transaction", "GET /dashboard"],
+]
+
+injection_patterns = [
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "POST /logowanie"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "POST /logowanie", "POST /logowanie"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /resetpassword", "POST /resetpassword"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /resetpassword", "POST /resetpassword", "POST /resetpassword"],
+    ["GET /dashboard", "GET /rejestracja", "POST /rejestracja"],
+    ["GET /dashboard", "GET /rejestracja", "POST /rejestracja", "GET /logowanie", "POST /logowanie"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /settings"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /profile"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction", "POST /transaction"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction", "POST /transaction", "POST /transaction"],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction", "POST /transaction", "GET /dashboard"],
 ]
 
 # Templates for valid and SQL injection payloads
@@ -46,11 +61,12 @@ def generate_log_entry(ip, timestamp, url, http_method, is_sql_injection, user_a
     ]
 
     valid_payloads = {
-        "/logowanie": "login=user{}&password=pass{}&action=login",
+        "/logowanie": "login=user{}&password=&action=login",
         "/resetpassword": "email=user{}@example.com&action=resetpassword",
-        "/transaction": "transaction_id={}&amount={}&currency=PLN",
+        "/transakcja": "recipientAccount=97+8817+1010+{}+5548+0858+2750&recipientName=EduProgress+Polska&street=ul.+Promienna&houseNumber=27&apartmentNumber=13&postalCode={}&city=Kasztan%C3%B3w&transferTitle=Wynajem+salki+konferencyjnej&action=send&savedRecipient=1",
         "/profile": "profile_id={}&update=address",
-        "/settings": "setting=darkmode&enabled=true"
+        "/settings": "setting=darkmode&enabled=true",
+        "/rejestracja": "firstName=user{}&lastName=user{}&email=user{}mouse780@onet.pl&password=&confirmPassword=&dataConsent=1&action=register"
     }
 
     sql_injections = [
@@ -108,17 +124,17 @@ def generate_csv(filename, group_count):
         group_ip = generate_ip()
         group_timestamp = generate_timestamp(start_date, end_date)
         user_agent = "Mozilla/5.0 (Group {}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36".format(random.randint(1000, 9999))
-        is_sql_injection = random.choice([True, False])
+        is_sql_injection = random.choice([False, False, False, True])
+        group_patterns = []
         if is_sql_injection:
             sql_injection_count += 1
+            group_patterns = random.sample(injection_patterns, random.randint(1, 5))
+        else:
+            group_patterns = random.sample(valid_patterns, random.randint(1, 5))
 
-        # Choose and combine random patterns
-        group_patterns = random.sample(patterns, random.randint(1, 3))  # Use 1 to 3 patterns
         for pattern in group_patterns:
             for action in pattern:
                 http_method, url = action.split()
-                if (http_method == "GET"):
-                    is_sql_injection = False
                 log_entry = generate_log_entry(group_ip, group_timestamp, url, http_method, is_sql_injection, user_agent)
                 logs.append(log_entry)
                 group_timestamp += timedelta(seconds=random.randint(1, 300))  # Increment time
@@ -137,4 +153,4 @@ def generate_csv(filename, group_count):
     print(f"Generated {len(logs)} logs with {sql_injection_count} SQL injection attempts.")
 
 # Example usage
-generate_csv("generated_logs_tests.csv", group_count=2000) # 7869
+generate_csv("generated_logs.csv", group_count=10000) # 4956
