@@ -18,6 +18,7 @@ def read_form_csv_and_return_data_with_label(input_csv, group_column_index, extr
     )
 
     labels = grouped[extract_columns[1]].first().tolist()
+
     return concatenated_payloads, labels
 
 used_ips = []
@@ -84,7 +85,7 @@ bruteforce_patterns = [
     ["GET /dashboard", "GET /logowanie"] + ["POST /logowanie" for _ in range(0, random.randint(13, 18))],
     ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /resetpassword"] + ["POST /resetpassword" for _ in range(0, random.randint(13, 18))],
     ["GET /dashboard", "GET /rejestracja"] + ["POST /rejestracja" for _ in range(0, random.randint(13,  18))],
-    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction"] + ["POST /transaction" for _ in range(0, random.randint(13,  18))],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction"] + ["POST /transakcja" for _ in range(0, random.randint(13,  18))],
     ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction", "POST /transaction", "GET /transakcja,e9da7ade10sadasdsadsad4a18ef129f7e17fd10"] + ["POST /transakcja,e9da7ade10sadasdsadsad4a18ef129f7e17fd10" for _ in range(0, random.randint(13,  18))],
 ]
 
