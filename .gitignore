@@ -1,2 +1,6 @@
 ./ing
 __pycache__
+data/*
+vectorizer.pkl
+vulnerabilities_classification_model.pth
+model_metadata.pkl
