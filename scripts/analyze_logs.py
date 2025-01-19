@@ -35,21 +35,27 @@ with torch.no_grad():
 
 class_counts = {i: 0 for i in range(num_classes)}
 
+wrong_interpret_normal = 0
+wrong_interpret_brute = 0
+
 for i, predicted_class in enumerate(predicted_classes.tolist()):
     probabilities_for_element = probabilities[i].tolist()
     if (probabilities_for_element[2] > 0.5 and labels[i] != 2):
-        class_counts[1] += 1
+        wrong_interpret_normal += 1
     if (probabilities_for_element[2] < 0.5 and labels[i] == 2):
-        class_counts[2] += 1
-    # if (probabilities_for_element[1] > 0.5):
-    #     print("\033[31m" + f"Warning: possible SQL Injection attack attempt from IP: {labels[i]}" + "\033[0m")
-    #     class_counts[1] += 1
-    #     # print("\033[33m")
-    #     # print(*data[i].split(), sep='\n')
-    #     # print("\033[0m")
-    # if (probabilities_for_element[2] > 0.98):
+        wrong_interpret_brute += 1
+    if (probabilities_for_element[0] > 0.5):
+        class_counts[0] += 1
+    if (probabilities_for_element[1] > 0.5):
+        # print("\033[31m" + f"Warning: possible SQL Injection attack attempt from IP: {labels[i]}" + "\033[0m")
+        class_counts[1] += 1
+        # print("\033[33m")
+        # print(*data[i].split(), sep='\n')
+        # print("\033[0m")
+    if (probabilities_for_element[2] > 0.5):
         print("\033[31m" + f"Warning, probable bruteforce attack attempt from IP: {labels[i]}" + "\033[0m")
         print("\033[33m" + f"POST Requests Number {len(data[i].split())} {probabilities_for_element[2]}" + "\033[0m")
-        # class_counts[2] += 1
+        class_counts[2] += 1
 
 print("\033[34m" + f"Summary: Normal activity: {class_counts[0]}, SQL Injection: {class_counts[1]}, brouteforce: {class_counts[2]}" + "\033[0m")
+print(f"Zła interpretacja normalnych {wrong_interpret_normal} i brute {wrong_interpret_brute}")

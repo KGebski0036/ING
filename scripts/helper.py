@@ -81,11 +81,11 @@ injection_patterns = [
 ]
 
 bruteforce_patterns = [
-    ["GET /dashboard", "GET /logowanie"] + ["POST /logowanie" for _ in range(10, random.randint(10, 20))],
-    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /resetpassword"] + ["POST /resetpassword" for _ in range(10, random.randint(10, 20))],
-    ["GET /dashboard", "GET /rejestracja"] + ["POST /rejestracja" for _ in range(10, random.randint(10, 20))],
-    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction"] + ["POST /transaction" for _ in range(10, random.randint(10, 20))],
-    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction", "POST /transaction", "GET /transakcja,e9da7ade10sadasdsadsad4a18ef129f7e17fd10"] + ["POST /transakcja,e9da7ade10sadasdsadsad4a18ef129f7e17fd10" for _ in range(10, random.randint(10, 20))],
+    ["GET /dashboard", "GET /logowanie"] + ["POST /logowanie" for _ in range(30, random.randint(30, 40))],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /resetpassword"] + ["POST /resetpassword" for _ in range(30, random.randint(30, 40))],
+    ["GET /dashboard", "GET /rejestracja"] + ["POST /rejestracja" for _ in range(30, random.randint(30, 40))],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction"] + ["POST /transaction" for _ in range(30, random.randint(30, 40))],
+    ["GET /dashboard", "GET /logowanie", "POST /logowanie", "GET /transaction", "POST /transaction", "GET /transakcja,e9da7ade30sadasdsadsad4a18ef129f7e17fd30"] + ["POST /transakcja,e9da7ade30sadasdsadsad4a18ef129f7e17fd30" for _ in range(30, random.randint(30, 40))],
 ]
 
 referrers = [
