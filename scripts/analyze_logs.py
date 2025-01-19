@@ -22,7 +22,7 @@ model = MultiClassificationModel(input_dim=input_dim, num_classes=num_classes)
 model.load_state_dict(torch.load('vulnerabilities_classification_model.pth', weights_only=True))
 model.eval()
 
-data, labels = read_form_csv_and_return_data_with_label(args.filename, 2, [9, 10])
+data, labels = read_form_csv_and_return_data_with_label(args.filename, 2, [9, 2])
 
 new_features = vectorizer.transform(data).toarray()
 
@@ -40,9 +40,9 @@ wrong_interpret_brute = 0
 
 for i, predicted_class in enumerate(predicted_classes.tolist()):
     probabilities_for_element = probabilities[i].tolist()
-    if (probabilities_for_element[2] > 0.5 and labels[i] != 2):
+    if (probabilities_for_element[2] > 0.9 and labels[i] != 2):
         wrong_interpret_normal += 1
-    if (probabilities_for_element[2] < 0.5 and labels[i] == 2):
+    if (probabilities_for_element[2] < 0.9 and labels[i] == 2):
         wrong_interpret_brute += 1
     if (probabilities_for_element[0] > 0.5):
         class_counts[0] += 1
@@ -52,7 +52,7 @@ for i, predicted_class in enumerate(predicted_classes.tolist()):
         # print("\033[33m")
         # print(*data[i].split(), sep='\n')
         # print("\033[0m")
-    if (probabilities_for_element[2] > 0.5):
+    if (probabilities_for_element[2] > 0.9):
         print("\033[31m" + f"Warning, probable bruteforce attack attempt from IP: {labels[i]}" + "\033[0m")
         print("\033[33m" + f"POST Requests Number {len(data[i].split())} {probabilities_for_element[2]}" + "\033[0m")
         class_counts[2] += 1
