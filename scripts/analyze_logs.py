@@ -42,7 +42,7 @@ for i, predicted_class in enumerate(predicted_classes.tolist()):
     if (probabilities_for_element[1] > 0.5):
         print("\033[31m" + f"Warning: possible SQL Injection attack attempt from IP: {labels[i]}" + "\033[0m")
         class_counts[1] += 1
-    if (probabilities_for_element[2] > 0.60):
+    if (probabilities_for_element[2] > 0.90):
         print("\033[31m" + f"Warning, probable bruteforce attack attempt from IP: {labels[i]}" + "\033[0m")
         class_counts[2] += 1
 

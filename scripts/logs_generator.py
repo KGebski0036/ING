@@ -56,7 +56,7 @@ def generate_csv(filename, group_count):
         group_ip = generate_unique_ip()
         group_timestamp = generate_timestamp(start_date, end_date)
         user_agent = "Mozilla/5.0 (Group {}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36".format(random.randint(1000, 9999))
-        attack_type = random.choice([0, 0, 0, 1, 2, 2])
+        attack_type = random.choice([0, 1, 2])
         group_patterns = []
 
         if attack_type == 1:
