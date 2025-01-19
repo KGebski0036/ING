@@ -22,7 +22,7 @@ model = MultiClassificationModel(input_dim=input_dim, num_classes=num_classes)
 model.load_state_dict(torch.load('vulnerabilities_classification_model.pth', weights_only=True))
 model.eval()
 
-data, labels = read_form_csv_and_return_data_with_label(args.filename, 2, [9, 10])
+data, labels = read_form_csv_and_return_data_with_label(args.filename, 2, [9, 2])
 
 new_features = vectorizer.transform(data).toarray()
 
@@ -35,30 +35,16 @@ with torch.no_grad():
 
 class_counts = {i: 0 for i in range(num_classes)}
 
-wrong_interpret_normal = 0
-wrong_interpret_brute = 0
-
 for i, predicted_class in enumerate(predicted_classes.tolist()):
     probabilities_for_element = probabilities[i].tolist()
-    if (probabilities_for_element[2] > 0.60 and labels[i] != 2):
-        wrong_interpret_normal += 1
-    if (probabilities_for_element[2] < 0.60 and labels[i] == 2):
-        print()
-        print(probabilities_for_element[2])
-        print("\033[31m" + f"Warning, probable bruteforce attack attempt from IP: {labels[i]}" + "\033[0m")
-        print(data[i])
-        wrong_interpret_brute += 1
     if (probabilities_for_element[0] > 0.5):
         class_counts[0] += 1
     if (probabilities_for_element[1] > 0.5):
-        # print("\033[31m" + f"Warning: possible SQL Injection attack attempt from IP: {labels[i]}" + "\033[0m")
+        print("\033[31m" + f"Warning: possible SQL Injection attack attempt from IP: {labels[i]}" + "\033[0m")
         class_counts[1] += 1
-        # print("\033[33m")
-        # print(*data[i].split(), sep='\n')
-        # print("\033[0m")
     if (probabilities_for_element[2] > 0.60):
-        # print("\033[31m" + f"Warning, probable bruteforce attack attempt from IP: {labels[i]}" + "\033[0m")
+        print("\033[31m" + f"Warning, probable bruteforce attack attempt from IP: {labels[i]}" + "\033[0m")
         class_counts[2] += 1
 
 print("\033[34m" + f"Summary: Normal activity: {class_counts[0]}, SQL Injection: {class_counts[1]}, brouteforce: {class_counts[2]}" + "\033[0m")
-print(f"Zła interpretacja normalnych {wrong_interpret_normal} i brute {wrong_interpret_brute}")
+
