@@ -5,8 +5,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 import pickle
 from helper import *
+from argparse import ArgumentParser
 
-input_csv = "./data/generated_logs.csv"
+parser = ArgumentParser()
+parser.add_argument("-f", "--file", dest="filename",
+                    help="read logs from FILE", metavar="FILE", required=True)
+args = parser.parse_args()
+
+input_csv = args.filename
 
 if __name__ =="__main__":
 
@@ -70,6 +76,6 @@ if __name__ =="__main__":
         "num_classes": num_classes,
         "input_dim": input_dim,
     }
-    
+
     with open('model_metadata.pkl', 'wb') as f:
         pickle.dump(metadata, f)

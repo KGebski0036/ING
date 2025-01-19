@@ -1,8 +1,14 @@
 import pandas as pd
-
+from argparse import ArgumentParser
 file_path = './data/logs.csv'
 group_by = 'IP_Address'
-grouped_output_path = './data/humanized_logs.txt'
+
+parser = ArgumentParser()
+parser.add_argument("-f", "--file", dest="filename",
+                    help="read logs from FILE", metavar="FILE", required=True)
+args = parser.parse_args()
+
+grouped_output_path = args.filename
 
 logs = pd.read_csv(file_path)
 
