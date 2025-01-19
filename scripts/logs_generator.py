@@ -66,7 +66,7 @@ def generate_csv(filename, group_count):
             bruteforce_count += 1
             group_patterns = random.sample(bruteforce_patterns, random.randint(1, 5))
         else:
-            group_patterns = random.sample(valid_patterns, random.randint(1, 1))
+            group_patterns = random.sample(valid_patterns, random.randint(1, 3))
 
         for pattern in group_patterns:
             for action in pattern:
