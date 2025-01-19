@@ -68,12 +68,19 @@ def generate_csv(filename, group_count):
         else:
             group_patterns = random.sample(valid_patterns, random.randint(1, 3))
 
+        post_counter = 0
+        tmp = []
         for pattern in group_patterns:
             for action in pattern:
                 http_method, url = action.split()
+                if http_method == "POST":
+                    post_counter += 1
                 log_entry = generate_log_entry(group_ip, group_timestamp, url, http_method, attack_type, user_agent)
-                logs.append(log_entry)
+                tmp.append(log_entry)
                 group_timestamp += timedelta(seconds=random.randint(1, 300))
+        if post_counter < 10 and attack_type == 2:
+            continue
+        logs += tmp
 
     logs.sort(key=lambda x: datetime.strptime(x["Date"] + " " + x["Time"], "%d/%b/%Y %H:%M:%S"))
 
