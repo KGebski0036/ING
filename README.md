@@ -16,3 +16,24 @@ OPIS
 
 ## Contents
 
+- [Logs Humanizer](scripts/logs_humanizer.py) - script to humanize logs and goupoing them by ip address
+- [Logs Generator](scripts/logs_generator.py) - script to generate  random logs
+- [Create Model](scripts/create_model.py) - script to create a AI model for analyzing logs 
+- [Analyze Logs](scripts/analyze_logs.py) - script to analyze logs using created AI model
+
+## How to start program
+
+### Linux
+
+#### Requirements
+```
+sudo apt install make python3 python3.11-venv
+```
+
+After downoadin this repository start a terminal inside it.
+```bash
+$ python3 -m venv ing
+$ source ing/bin/activate
+$ pip install -r requirements.txt
+$ make create_model
+```

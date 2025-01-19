@@ -64,7 +64,7 @@ def generate_csv(filename, group_count):
             group_patterns = random.sample(injection_patterns, random.randint(1, 5))
         elif attack_type == 2:
             bruteforce_count += 1
-            group_patterns = random.sample(bruteforce_patterns, random.randint(1, 2))
+            group_patterns = random.sample(bruteforce_patterns, random.randint(1, 5))
         else:
             group_patterns = random.sample(valid_patterns, random.randint(1, 5))
 

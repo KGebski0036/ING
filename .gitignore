@@ -1,4 +1,4 @@
-./ing
+ing
 __pycache__
 data/*
 vectorizer.pkl
