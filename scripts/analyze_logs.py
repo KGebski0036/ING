@@ -33,20 +33,19 @@ with torch.no_grad():
     probabilities = nn.functional.softmax(outputs, dim=1)
     predicted_classes = torch.argmax(probabilities, dim=1)
 
+class_counts = {i: 0 for i in range(num_classes)}
+
 for i, predicted_class in enumerate(predicted_classes.tolist()):
     probabilities_for_element = probabilities[i].tolist()
     if (probabilities_for_element[1] > 0.5):
         print("\033[31m" + f"Warning: possible SQL Injection attack attempt from IP: {labels[i]}" + "\033[0m")
+        class_counts[1] += 1
         # print("\033[33m")
         # print(*data[i].split(), sep='\n')
         # print("\033[0m")
     if (probabilities_for_element[2] > 0.98):
         print("\033[31m" + f"Warning, probable bruteforce attack attempt from IP: {labels[i]}" + "\033[0m")
         print("\033[33m" + f"POST Requests Number {len(data[i].split())} {probabilities_for_element[2]}" + "\033[0m")
-
-class_counts = {i: 0 for i in range(num_classes)}
-
-for cls in predicted_classes.tolist():
-    class_counts[cls] += 1
+        class_counts[2] += 1
 
 print("\033[34m" + f"Summary: Normal activity: {class_counts[0]}, SQL Injection: {class_counts[1]}, brouteforce: {class_counts[2]}" + "\033[0m")
