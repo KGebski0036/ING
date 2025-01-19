@@ -91,5 +91,5 @@ if __name__ =="__main__":
         pickle.dump(vectorizer, f)
 
     # Save the Model
-    torch.save(model.state_dict(), 'vornabilities_classification_model.pth')
+    torch.save(model.state_dict(), 'vulnerabilities_classification_model.pth')
     print("Model state dictionary saved!")

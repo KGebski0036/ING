@@ -23,12 +23,12 @@ class MultiClassificationModel(nn.Module):
 with open('vectorizer.pkl', 'rb') as f:
     vectorizer = pickle.load(f)
 
-num_classes = 2 
-model = MultiClassificationModel(input_dim=12938, num_classes=num_classes)  # Match the input size used during training
+num_classes = 3
+model = MultiClassificationModel(input_dim=19029, num_classes=num_classes)  # Match the input size used during training
 model.load_state_dict(torch.load('vornabilities_classification_model.pth'))
 model.eval()  # Set the model to evaluation mode
 
-data, labels = group_and_sort_within_group("generated_logs_tests.csv", 2, [9, 9])
+data, labels = group_and_sort_within_group("generated_logs_test.csv", 2, [9, 9])
 
 # Preprocess new payloads using the loaded vectorizer
 new_features = vectorizer.transform(data).toarray()
