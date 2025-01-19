@@ -38,6 +38,9 @@ class_counts = {i: 0 for i in range(num_classes)}
 for i, predicted_class in enumerate(predicted_classes.tolist()):
     probabilities_for_element = probabilities[i].tolist()
     if (probabilities_for_element[2] > 0.5 and labels[i] != 2):
+        class_counts[1] += 1
+    if (probabilities_for_element[2] < 0.5 and labels[i] == 2):
+        class_counts[2] += 1
     # if (probabilities_for_element[1] > 0.5):
     #     print("\033[31m" + f"Warning: possible SQL Injection attack attempt from IP: {labels[i]}" + "\033[0m")
     #     class_counts[1] += 1
