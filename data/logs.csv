@@ -17,7 +17,7 @@
 06/Jan/2025,06:17:04,81.77.116.92,GET,"/",HTTP/1.1,200,"","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0",""
 06/Jan/2025,06:17:25,81.77.116.92,GET,"/logowanie",HTTP/1.1,200,"https://kingbank.pl/","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0",""
 06/Jan/2025,06:17:39,81.77.116.92,POST,"/logowanie",HTTP/1.1,200,"https://kingbank.pl/logowanie","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0","login=beabar2001&password=&action=login"
-06/Jan/2025,06:17:39,81.77.116.92,GET,"/dashboard",HTTP/1.1,200,"https://kingbank.pl/logowanie","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0",""
+06/Jan/20 25,06:17:39,81.77.116.92,GET,"/dashboard",HTTP/1.1,200,"https://kingbank.pl/logowanie","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0",""
 06/Jan/2025,06:17:50,81.77.116.92,GET,"/transakcja",HTTP/1.1,200,"https://kingbank.pl/dashboard","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0",""
 06/Jan/2025,06:19:01,81.77.116.92,POST,"/transakcja",HTTP/1.1,200,"https://kingbank.pl/transakcja","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0","recipientAccount=97+8817+1010+9595+5548+0858+2750&recipientName=EduProgress+Polska&street=ul.+Promienna&houseNumber=27&apartmentNumber=13&postalCode=36276&city=Kasztan%C3%B3w&transferTitle=Wynajem+salki+konferencyjnej&action=send&savedRecipient=1"
 06/Jan/2025,06:19:01,81.77.116.92,GET,"/transakcja,e9da7ade108a1d6d8ac69444a18ef129f7e17fd5",HTTP/1.1,200,"https://kingbank.pl/transakcja","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0",""
