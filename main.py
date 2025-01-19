@@ -31,35 +31,43 @@ if __name__ =="__main__":
     X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
     y_test_tensor = torch.tensor(y_test, dtype=torch.float32)
 
-    # Define the Binary Classification Model
-    class BinaryClassificationModel(nn.Module):
-        def __init__(self, input_dim):
-            super(BinaryClassificationModel, self).__init__()
+    # Define the Multiclass Classification Model
+    class MultiClassificationModel(nn.Module):
+        def __init__(self, input_dim, num_classes):
+            super(MultiClassificationModel, self).__init__()
             self.network = nn.Sequential(
                 nn.Linear(input_dim, 16),
                 nn.ReLU(),
                 nn.Linear(16, 8),
                 nn.ReLU(),
-                nn.Linear(8, 1),
-                nn.Sigmoid()
+                nn.Linear(8, num_classes)
             )
 
         def forward(self, x):
             return self.network(x)
 
+    # Number of classes
+    num_classes = len(label_encoder.classes_)
+    print(num_classes)
 
+    # Initialize the model for multiclass classification
     input_dim = X_train_tensor.shape[1]
-    model = BinaryClassificationModel(input_dim)
+    model = MultiClassificationModel(input_dim, num_classes)
 
-    criterion = nn.BCELoss()
+    # Update the loss function to CrossEntropyLoss
+    criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.01)
+
+    # Ensure y_train_tensor and y_test_tensor are long (integer) type
+    y_train_tensor = torch.tensor(y_train, dtype=torch.long)
+    y_test_tensor = torch.tensor(y_test, dtype=torch.long)
 
     # Train the Model
     epochs = 100
     for epoch in range(epochs):
         model.train()
 
-        outputs = model(X_train_tensor).squeeze()
+        outputs = model(X_train_tensor)
         loss = criterion(outputs, y_train_tensor)
 
         optimizer.zero_grad()
@@ -71,16 +79,17 @@ if __name__ =="__main__":
     # Evaluate the Model
     model.eval()
     with torch.no_grad():
-        test_outputs = model(X_test_tensor).squeeze()
-        predictions = (test_outputs >= 0.5).int()
-        accuracy = (predictions == y_test_tensor.int()).float().mean()
+        test_outputs = model(X_test_tensor)
+        predictions = torch.argmax(test_outputs, dim=1)
+        accuracy = (predictions == y_test_tensor).float().mean()
 
     print(f"Test Accuracy: {accuracy:.4f}")
+
 
     # Save the vectorizer
     with open('vectorizer.pkl', 'wb') as f:
         pickle.dump(vectorizer, f)
 
     # Save the Model
-    torch.save(model.state_dict(), 'sql_classification_model.pth')
+    torch.save(model.state_dict(), 'vornabilities_classification_model.pth')
     print("Model state dictionary saved!")
