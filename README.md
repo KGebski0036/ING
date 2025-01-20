@@ -1,6 +1,11 @@
-# ING
+# WH - RoarING Success
 
-OPIS
+This repository contains a solution for the anomaly detection task in IT systems. The project includes:
+
+- Log Analysis: Processing and analyzing a log file containing records of system activities, including both normal operations and potential anomalies.
+- AI Model Development: Building an AI-powered detection system capable of identifying attacks.
+
+This solution is designed for use in IT security monitoring systems.
 
 ## Collaborators
 <div align="center">
@@ -16,24 +21,44 @@ OPIS
 
 ## Contents
 
-- [Logs Humanizer](scripts/logs_humanizer.py) - script to humanize logs and goupoing them by ip address
-- [Logs Generator](scripts/logs_generator.py) - script to generate  random logs
-- [Create Model](scripts/create_model.py) - script to create a AI model for analyzing logs 
-- [Analyze Logs](scripts/analyze_logs.py) - script to analyze logs using created AI model
+- [Logs Humanizer](scripts/logs_humanizer.py) - Script to humanize logs and group them by IP address.
+- [Logs Generator](scripts/logs_generator.py) - Script to generate random logs.
+- [Create Model](scripts/create_model.py) - Script to create an AI model for analyzing logs.
+- [Analyze Logs](scripts/analyze_logs.py) -  Script to analyze logs using the created AI model.
 
 ## How to start program
 
 ### Linux
 
 #### Requirements
-```
+```bash
 sudo apt install make python3 python3.11-venv
 ```
 
-After downoadin this repository start a terminal inside it.
+After downloading this repository, start a terminal inside the project directory.
+
+Prepare the environment:
 ```bash
-$ python3 -m venv ing
-$ source ing/bin/activate
+$ python3 -m venv env
+$ source env/bin/activate
 $ pip install -r requirements.txt
-$ make create_model
+```
+
+Make targets:
+
+>Parameters can be changed inside the Makefile.
+```bash
+$ make create_model      # Creating new model 
+$ make test_model_custom # Generate custom logs and test the model on them
+$ make test_model        # Use pre-prepared logs to test the model
+$ make humanize_logs     # Convert logs to a human-readable format
+$ make clean             # Clear generated logs and models 
+```
+
+Script usage:
+```bash
+$ python3 scripts/analyze_logs.py -f=[FileWitchLogs]
+$ python3 scripts/create_model.py -f=[FileWitchLogs]
+$ python3 scripts/logs_generator.py -f=[FileWitchLogs] -g=[NumberOfGroups]
+$ python3 scripts/logs_humanizer.py -f=[FileWitchLogs]
 ```
